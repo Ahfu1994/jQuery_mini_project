@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion1</title>
+    <style>
+        #accordion {
+            width: 400px;
+            margin: 0 auto;
+            border-bottom: 1px solid #08c4de;
+        }
+        
+        #accordion h4 {
+            background-color: #84ecfb;
+            border: 1px solid #08c4de;
+            border-bottom: none;
+            margin: 0;
+            padding: 5px;
+            cursor: pointer;
+        }
+        
+        #accordion h4:hover {
+            background-color: #08c4de;
+        }
+        
+        #accordion p {
+            background-color: #e6fbfe;
+            border: 1px solid #08c4de;
+            border-bottom: none;
+            border-top: none;
+            margin: 0;
+            padding: 15px;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#accordion p:not(:first)").hide(); // เลือก p ทั้งหมดยกเว้น อันแรก
+            $("#accordion h4").click(function() {
+                $(this).next().slideToggle(500) // เมื่อ click ที่ h4 แล้ว p ที่อยู่ถัดจาก h4 จะ show ระยะเวลาหน่วง 1/2 วินาที
+                    .siblings("p:visible").slideUp(500); // p ที่ show อยู่ก่อนหน้า จะซ่อน
+            });
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="accordion">
+        <h4>First Section</h4>
+        <p>This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.This is the first paragraph.</p>
+        <h4>Second Section</h4>
+        <p>This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the second paragraph.This is the
+            second paragraph.
+        </p>
+        <h4>Third Section</h4>
+        <p>This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.This is the third paragraph.</p>
+        <h4>Fourth Section</h4>
+        <p>This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the fourth paragraph.This is the
+            fourth paragraph.
+        </p>
+        <h4>Fifth Section</h4>
+        <p>This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.This is the fifth paragraph.</p>
+        <h4>Sixth Section</h4>
+        <p>This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.This is the sixth paragraph.</p>
+    </div>
+</body>
+
+</html>

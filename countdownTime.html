@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>count down</title>
+    <style>
+        #container {
+            width: 300px;
+            height: 300px;
+            margin: 0px auto;
+        }
+        
+        p,
+        span,
+        input {
+            font-family: sans-serif;
+            font-size: 30px;
+        }
+        
+        p {
+            margin-bottom: 0px;
+        }
+        
+        #hours,
+        #seconds {
+            width: 35px;
+            text-align: center;
+            border: none;
+            outline: none;
+        }
+        
+        #minutes {
+            width: 50px;
+            text-align: center;
+            border: none;
+            outline: none;
+        }
+        
+        #timer {
+            margin: 10px;
+        }
+        
+        button {
+            width: 90px;
+            height: 40px;
+            font-size: 25px;
+            cursor: pointer;
+            border: 1px solid black;
+            border-radius: 5px;
+            outline: none;
+            font-weight: bold;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        $(document).ready(function() {
+            let interval = 0;
+            let timeGap;
+            let hours, minutes, seconds;
+            const audio = new Audio("Squid Game - Alarm ! Jung Jaeil ! Korean.mp3");
+            $("input").keypress(function(evt) {
+                evt = (evt) ? evt : window.event;
+
+                let keyPress = (evt.which) ? evt.which : evt.keyCode;
+
+                if (keyPress > 31 && (keyPress < 48 || keyPress > 57)) {
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+
+            $("#btnReset").click(function() {
+                if (interval) {
+                    clearInterval(interval);
+                    // $("#mySound")[0].pause();
+                    audio.pause();
+                    displayPlaceHolder();
+                    $("input").prop("disabled", false);
+                    $("#btnClick").html("Start");
+                }
+            });
+            $("#btnClick").click(function() {
+                if ($(this).html() == "Start") {
+
+                    if ($("#hours").val() == "" && $("#minutes").val() == "" && $("#seconds").val() == "") {
+                        alert("Enter some value");
+
+                    } else {
+                        $(this).html("Stop");
+                        $("input").prop("disabled", true);
+                        updateTime();
+                    }
+                } else if ($(this).html() == "Stop") {
+                    if (timeGap <= 0) {
+                        // $("#mySound")[0].pause();
+                        audio.pause();
+                        $("input").prop("disabled", false);
+                        displayPlaceHolder();
+                    }
+                    clearInterval(interval);
+                    $(this).html("Start");
+                }
+            });
+
+            function displayPlaceHolder() {
+                $("#hours").val("").attr("placeholder", "hh");
+                $("#minutes").val("").attr("placeholder", "mm");
+                $("#seconds").val("").attr("placeholder", "ss");
+            }
+
+            function displayTime(timeToDisplay, id) {
+                if (timeToDisplay < 10) {
+                    $(id).val("0" + timeToDisplay);
+                } else {
+                    $(id).val(timeToDisplay);
+                }
+
+            }
+
+            function updateTime() {
+                let dt = new Date();
+                dt.setHours(dt.getHours() + +$("#hours").val());
+                dt.setMinutes(dt.getMinutes() + +$("#minutes").val());
+                dt.setSeconds(dt.getSeconds() + +$("#seconds").val());
+                let endTime = dt.valueOf();
+
+                interval = setInterval(function() {
+                    timeGap = endTime - Date.now();
+                    if (timeGap <= 0) {
+                        // $("#mySound")[0].play();
+                        audio.play();
+                        $("#mySound").prop("loop", true);
+                    } else {
+                        hours = parseInt(timeGap / 1000 / 60 / 60);
+                        displayTime(hours, "#hours");
+                        minutes = parseInt(timeGap / 1000 / 60);
+                        if (minutes >= 60) {
+                            minutes %= 60;
+                        }
+                        displayTime(minutes, "#minutes");
+                        seconds = parseInt(timeGap / 1000);
+                        if (seconds >= 60) {
+                            seconds %= 60;
+                        }
+                        displayTime(seconds, "#seconds");
+                        // console.log(hours + " : " + minutes + " : " + seconds)
+                    }
+
+
+                }, 100);
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <audio src="">
+        <source src="Squid Game - Alarm ! Jung Jaeil ! Korean.mp3" type="audio/mpeg" id="mySound" >
+    </audio>
+    <div id="container">
+        <p>Set End Time</p>
+        <div id="timer">
+            <input type="text" id="hours" placeholder="hh" maxlength="2"><span>:</span>
+            <input type="text" id="minutes" placeholder="mm" maxlength="2"><span>:</span>
+            <input type="text" id="seconds" placeholder="ss" maxlength="2">
+        </div>
+        <button id="btnClick">Start</button>
+        <button id="btnReset">Reset</button>
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Speed</title>
+    <style>
+        #main {
+            width: 340px;
+            height: 400px;
+            margin: 0px auto;
+            /* border: 2px solid black; */
+        }
+        
+        button {
+            width: 80px;
+            height: 30px;
+            border: 1px solid black;
+            border-radius: 5px;
+            text-align: center;
+            margin: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        span {
+            font-size: 20px;
+        }
+        
+        #container {
+            width: 350px;
+            height: 350px;
+            text-align: center;
+            /* border: 1px solid black; */
+        }
+        
+        .box {
+            width: 65px;
+            height: 65px;
+            background: green;
+            color: white;
+            font-size: 30px;
+            margin: 2px;
+            float: left;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 65px;
+            cursor: pointer;
+        }
+        
+        #nextNum {
+            float: right;
+        }
+        
+        #result,
+        #performance {
+            font-size: 25px;
+        }
+        
+        #result {
+            color: red;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        $(document).ready(function() {
+            let currentNum = 1;
+            let interval;
+            let elapsedTime;
+            let clicked = 0;
+            arrangeGame();
+
+            $("#btnClick").click(function() {
+                if (interval) {
+                    clearInterval(interval);
+                    arrangeGame();
+                }
+            });
+
+            function arrangeGame() {
+                currentNum = 1;
+                clicked = 0;
+                $("#container").empty();
+                $("#result, #performance").hide();
+                $("#timer, #nextNum, #container").show();
+                $("#timer").html("Timer : 0.000");
+                $("#nextNum").html("Next Number : " + currentNum);
+                for (let i = 1; i <= 25; i++) {
+                    $("#container").append("<div class='box'></div>");
+
+                }
+                let numArr1 = generateArray(1, 25);
+                let numArr2 = generateArray(26, 50);
+                $(".box").each(function(key, item) {
+
+                    $(item).html(numArr1.splice(Math.floor(Math.random() * numArr1.length), 1));
+                });
+
+                $(".box").click(function() {
+                    if (clicked == 0) {
+                        let startTime = Date.now();
+                        interval = setInterval(function() {
+                            elapsedTime = Date.now() - startTime;
+                            $("#timer").html("Timer : " + (elapsedTime / 1000).toFixed(3));
+                        }, 100);
+                        clicked++;
+                    }
+                    if ($(this).html() == currentNum) {
+                        currentNum++;
+                        $("#nextNum").html("Next Number : " + currentNum);
+                        $(this).html(numArr2.splice(Math.floor(Math.random() * numArr2.length), 1));
+                        $(this).css("background", "#66ff99")
+                        if (currentNum > 26) {
+                            $(this).css("background", "white");
+                        }
+                        if (currentNum == 51) {
+                            // $("#container").html("Finish!!!");
+                            clearInterval(interval);
+                            $("#result, #performance").show();
+                            $("#timer, #nextNum, #container").hide();
+                            $("#result").html("Your took " + ((elapsedTime / 1000).toFixed(3)) + " second.");
+                        }
+                    }
+                });
+
+            }
+
+            function generateArray(min, max) {
+                let myArr = [];
+                for (let i = min; i <= max; i++) {
+                    myArr.push(i);
+
+                }
+                return myArr;
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <div id="main">
+        <button id="btnClick">Restart</button>
+        <br>
+        <span id="result"></span>
+        <div id="performance">
+            Performance (in seconds)<br> 0 - 20 : Lying<br> 20 - 30 : Impossible<br> 30 - 40 : Expert<br> 40 - 50 : Normal<br> 50 - 60 : Not Bad<br> 60 and above : Need to imp0rve
+        </div>
+        <br>
+        <span id="timer">Timer : 0.000</span>
+        <span id="nextNum">Next Number : 1</span>
+        <div id="container"></div>
+    </div>
+
+</body>
+
+</html>

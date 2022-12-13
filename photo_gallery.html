@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+
+    <style>
+        #gallery {
+            width: 450px;
+            margin: 25px auto;
+            position: relative;
+        }
+        
+        #upper {
+            height: 325px;
+            margin-bottom: 10px;
+        }
+        
+        .thumb img {
+            width: 150px;
+            height: 120px;
+        }
+        
+        #lower {
+            overflow: hidden;
+        }
+        
+        #upper img {
+            width: 100%;
+            position: absolute;
+        }
+        
+        .arrow {
+            position: absolute;
+            bottom: 50px;
+        }
+        
+        .arrow img {
+            width: 20px;
+            height: 20px;
+        }
+        
+        #left {
+            left: -60px;
+        }
+        
+        #right {
+            right: -60px;
+        }
+        
+        #thumbs {
+            white-space: nowrap;
+        }
+        
+        #thumbs img {
+            opacity: 0.4;
+        }
+        
+        #thumbs img:hover {
+            opacity: 1;
+        }
+        
+        #thubms a {
+            display: inline-block;
+        }
+        
+        .arrow.disabled {
+            display: none;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        let images;
+        let thumbWith;
+        let count = 0;
+        let imageArray = [
+            "card_images/1.jpg",
+            "card_images/2.jpg",
+            "card_images/3.jpg",
+            "card_images/4.jpg",
+            "card_images/5.jpg",
+            "card_images/6.jpg",
+            "card_images/7.jpg",
+            "card_images/8.jpg",
+        ];
+
+        $(document).ready(function() {
+            $.each(imageArray, function(index, value) {
+                $("#upper").append("<img data-id='img" + index + "' src='" + value + "'>");
+                $("#thumbs").append("<a href='#' class='thumb' data-id='img" + index + "'><img src='" + value + "'><a>");
+            });
+
+            images = $("#upper").find("img");
+            thumbWith = $(".thumb").css("width");
+            thumbWith = thumbWith.slice(0, (thumbWith.length - 2));
+
+            updateArrows();
+
+            $(".thumb").on("click", function() {
+                let thumbId = $(this).attr("data-id");
+
+
+                $.each(images, function(index, value) {
+                    if (thumbId == $(value).attr("data-id")) {
+                        $(value).css("z-index", "1");
+                    } else {
+                        $(value).css("z-index", "-1");
+                    }
+                });
+            });
+
+            $(".arrow").on("click", function() {
+                let arrowId = $(this).attr("id");
+
+                // alert(thumbWith);
+                let scrollString;
+                if (arrowId == "left") {
+                    scrollString = "+=";
+                    count--;
+                } else {
+                    scrollString = "-=";
+                    count++;
+                }
+                // alert(count);
+                $("#thumbs").animate({
+                    marginLeft: scrollString + thumbWith + "px"
+                }, "fast", updateArrows);
+
+            })
+
+        });
+
+        function updateArrows() {
+            // alert("Inside");
+            let totalNoImages = images.length;
+            // alert(totalNoImages);
+            let galleryWidth = $('#gallery').css("width");
+            galleryWidth = galleryWidth.slice(0, (galleryWidth.length - 2));
+            // alert(galleryWidth);
+            noThumbsAtTime = galleryWidth / thumbWith;
+            // alert(noThumbsAtTime);
+
+            let lastCount = totalNoImages - noThumbsAtTime;
+            if (count == lastCount) {
+                $("#right").addClass("disabled");
+            } else {
+                $("#right").removeClass("disabled");
+            }
+
+            if (count == 0) {
+                $("#left").addClass("disabled");
+            } else {
+                $("#left").removeClass("disabled");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="gallery">
+        <div id="upper"></div>
+        <div id="lower">
+            <a href="#" class="arrow" id="left"><img src="imgs/arrow_left.png" alt=""></a>
+            <div id="thumbs"></div>
+            <a href="#" class="arrow" id="right"><img src="imgs/arrow_right.png" alt=""></a>
+        </div>
+    </div>
+
+</body>
+
+</html>

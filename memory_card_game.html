@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion1</title>
+    <style>
+        body {
+            background-color: #e9feec;
+        }
+        
+        #container {
+            margin: 0 auto;
+            width: 640px;
+            font: 20px Verdana;
+        }
+        
+        #information {
+            text-align: center;
+            margin: 20px;
+        }
+        
+        .text {
+            color: #060f9d;
+        }
+        
+        .button {
+            color: #060f9d;
+            text-decoration: none;
+            background: #e1f835;
+            margin: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #images div {
+            float: left;
+            width: 100px;
+            height: 100px;
+            margin: 5px;
+            padding: 2px;
+            border: 4px solid #0cf609;
+            border-radius: 10px;
+            background: #0cf609;
+            cursor: pointer;
+        }
+        
+        #images div img {
+            width: 100px;
+            height: 100px;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        let imgSource = "";
+        let divId = "";
+        let imgFound = 0;
+        let moves = 0;
+        let imageArray = [
+            "card_images/1.jpg",
+            "card_images/2.jpg",
+            "card_images/3.jpg",
+            "card_images/4.jpg",
+            "card_images/5.jpg",
+            "card_images/6.jpg",
+            "card_images/7.jpg",
+            "card_images/8.jpg",
+            "card_images/9.jpg",
+            "card_images/10.jpg"
+        ];
+
+        function ShuffleImages() {
+            let len = imageArray.length * 2;
+            console.log(len);
+            let imgArr = new Array();
+            imgArr = $.merge($.merge([], imageArray), imageArray);
+            console.log(imgArr);
+            let currentDiv = $("#images div:first-child");
+            for (let z = 0; z < len; z++) {
+                // console.log(currentDiv.attr("id"));
+                let randomNum = Math.round(Math.random() * (imgArr.length - 1));
+                // console.log(imgArr[randomNum]);
+                $("#" + currentDiv.attr("id") + " img").attr("src", imgArr[randomNum]);
+                imgArr.splice(randomNum, 1);
+                currentDiv = currentDiv.next();
+            }
+        }
+
+        function OpenCard() {
+            let id = $(this).attr("id");
+            if ($("#" + id + " img").is(":hidden")) {
+                $("#" + id + " img").show("slow");
+                if (imgSource == "") {
+                    divId = id;
+                    imgSource = $("#" + id + " img").attr("src");
+                } else {
+                    let currentOpened = $("#" + id + " img").attr("src");
+                    if (imgSource != currentOpened) {
+                        setTimeout(function() {
+                            $("#" + id + " img").hide("slow");
+                            $("#" + divId + " img").hide("slow");
+                            divId = "";
+                            imgSource = "";
+                        }, 600);
+
+                    } else {
+                        divId = "";
+                        imgSource = "";
+                        imgFound++;
+                    }
+                }
+                moves++;
+                $("#moves").html(moves);
+                if (imageArray.length == imgFound) {
+                    setTimeout(function() {
+                        alert("Yes!!! You completeed the game with " + moves + "clicks")
+                    }, 1000);
+                }
+            }
+        }
+
+        function ResetGame() {
+            ShuffleImages();
+            moves = 0;
+            $("#move").html(moves);
+            $("#images div img").hide();
+            imgFound = 0;
+            imgSource = "";
+            divId = "";
+        }
+        $(document).ready(function() {
+            for (let i = 1; i < 3; i++) {
+                $.each(imageArray, function(index, value) {
+                    // console.log(value);
+                    $("#images").append("<div id=card" + i + index + "><img src=" + value + "></div>");
+
+                });
+            }
+            ShuffleImages();
+            $("#images div").click(OpenCard);
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="information">
+            <span class="text">Move</span>
+            <span class="text" id="moves">0</span>
+            <a href="" class="button" onclick="ResetGame();">Reset</a>
+        </div>
+        <div id="images">
+            <!-- <img src="card_images/1.jpg"> -->
+
+        </div>
+    </div>
+
+</body>
+
+</html>

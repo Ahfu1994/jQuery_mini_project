@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tooltip</title>
+    <style>
+        #container {
+            width: 80%;
+            margin: 0px auto;
+        }
+        
+        p {
+            font-size: 20px;
+            text-align: justify;
+            line-height: 2;
+            padding: 5px;
+        }
+        
+        a,
+        a:visited {
+            text-decoration: none;
+            font-size: 25px;
+            color: orangered;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .tooltip {
+            display: none;
+            width: 100px;
+            height: 40px;
+            background-color: purple;
+            color: white;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 20px;
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -50px;
+        }
+        
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            border-width: 10px;
+            border-style: solid;
+            border-color: purple transparent transparent transparent;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("a").append("<span class='tooltip'></span>");
+            $("a").hover(function() {
+                $(this).find("span").fadeIn(1000);
+                let capital = $(this).attr("title");
+                $(this).find("span").text(capital);
+            }, function() {
+                $(this).find("span").fadeOut(500);
+
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. A fugiat, deleniti fuga inventore et porro tenetur similique nostrum ipsa adipisci deserunt voluptatum sequi at iure praesentium quaerat quis sunt necessitatibus. Voluptas libero quis eos doloribus
+            pariatur excepturi quas nisi. Consequatur praesentium modi necessitatibus excepturi aspernatur tempora quibusdam quis enim in minima, nisi ut tempore amet nostrum, quaerat nesciunt ex ipsa. Perferendis adipisci iusto, reprehenderit, fuga quis
+            ipsa quae consequuntur velit ab, aperiam ea laudantium qui cum perspiciatis recusandae unde facilis maxime in placeat delectus deleniti laboriosam. Eius repudiandae odit sunt! Eaque non natus magni magnam dolore omnis ipsum temporibus maxime,
+            totam deserunt praesentium repellat, et vero? Optio, vitae. Asperiores quaerat velit sequi quisquam ipsam delectus repellendus aliquam officiis sed culpa? Ducimus modi quas tenetur consequuntur, ratione dolor suscipit sequi earum minus nam
+            architecto corrupti <a href="#" title="Bangkok">Thailand</a> ipsum nostrum, cum, omnis quo similique <a href="#" title="Paris">France</a> assumenda mollitia. Doloribus, corrupti repudiandae deleniti dolorum officiis tempora quidem!
+            Quae incidunt, voluptatem ipsa voluptatum eveniet et, qui, sequi eius tempore modi ratione eos esse optio rem. Velit animi deleniti harum labore qui hic, quod voluptatibus temporibus, consequatur quia earum. Voluptatum nulla dicta consequatur
+            nesciunt odio quibusdam! Molestias explicabo aperiam sit quae culpa inventore atque nemo placeat, perferendis sunt aspernatur omnis, accusantium ad cumque sequi mollitia autem? Eum, sint vel? Perspiciatis omnis in iste eligendi possimus odit
+            repellat. Doloremque dicta aliquam eaque harum eum quod quos at esse nesciunt dolores, beatae nostrum minus quibusdam accusamus repellat quo! Aperiam, harum ipsa! Nulla, aperiam? Nam praesentium veniam amet esse. Voluptates delectus et, quaerat
+            illo necessitatibus impedit saepe laudantium eos recusandae modi voluptatibus ipsa in tenetur similique reiciendis earum distinctio quam nobis alias. Et sequi quia repellendus odio dolores rerum laboriosam omnis debitis officia impedit architecto
+            voluptas maxime, quaerat exercitationem,</p>
+        <p> excepturi dolore vitae? Dicta voluptatum quo accusamus at, facere tempora explicabo. Fugiat, aut. Accusantium consectetur eum explicabo nobis, ut error excepturi quibusdam reiciendis cum totam tenetur perferendis eligendi ratione laboriosam in
+            officiis ipsam tempora sunt perspiciatis dignissimos blanditiis. Officia dolorum exercitationem cum pariatur! Minus omnis rerum animi sint aliquam nobis expedita reprehenderit quas. Vel iste quibusdam eius nam, optio sapiente, blanditiis quasi
+            labore temporibus <a href="#" title="New Delhi">Indian</a> tempore ut beatae dicta odio tempora quis quisquam incidunt?</p>
+        <p> Ab suscipit alias dolores nam fugiat minima! Nisi, placeat ipsa. Repellendus saepe modi quisquam necessitatibus, nam illo dignissimos unde. Nemo aspernatur rem corrupti illo, odio illum voluptates natus alias neque? Optio aliquam, cupiditate corporis
+            autem vel aut aspernatur? Numquam, reiciendis aperiam! Illum sint voluptates optio, praesentium eos ipsum nulla? Obcaecati voluptates similique nostrum ipsum assumenda, commodi non quisquam aspernatur eaque? Id porro omnis accusamus pariatur
+            fugit similique quidem, nesciunt odit eaque debitis? Doloribus, ad ducimus amet delectus vero obcaecati, quae minus in recusandae facilis molestias, distinctio cupiditate aliquam libero debitis! Vero dolores vitae veritatis quas non porro,
+            suscipit deserunt? Voluptate nostrum sapiente totam quibusdam ratione dolore libero quas neque placeat vero. Corrupti recusandae hic maxime <a href="#" title="Jerusalem">Israel</a> sed minima eos, aperiam doloribus! <a href="#" title="Beijing">China</a>            Aliquid blanditiis vitae laboriosam aliquam est doloribus ipsa recusandae ut cum saepe! Unde voluptate doloribus quam ipsam cumque corporis eveniet, adipisci quis atque, molestiae reprehenderit? Nam consequuntur alias id fugit? Dignissimos
+            molestias nesciunt esse vitae recusandae incidunt aliquid hic est eaque. Delectus ipsa eveniet labore esse dolores voluptatem laudantium explicabo, eaque ullam corporis facilis officia perferendis vel maxime sapiente harum. Iusto perferendis
+            a, enim dignissimos at, doloremque nostrum molestias qui ut ipsam voluptas culpa laudantium praesentium ducimus nobis corrupti cupiditate odit nemo consequuntur. At minima vel reiciendis illo non enim! Alias suscipit magnam debitis minus laudantium
+            sunt distinctio, doloremque temporibus? Nam blanditiis praesentium ratione culpa consequatur cum pariatur exercitationem eveniet! Et, beatae consectetur officiis necessitatibus reiciendis dolorum! Aperiam, veniam? Impedit.
+        </p>
+    </div>
+
+
+</body>
+
+</html>

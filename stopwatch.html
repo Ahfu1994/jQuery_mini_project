@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion1</title>
+    <style>
+        #container {
+            width: 300px;
+            height: 300px;
+            margin: 300px auto;
+        }
+        
+        #timer {
+            margin-bottom: 15px;
+        }
+        
+        span {
+            font-size: 30px;
+        }
+        
+        sub {
+            font-size: 25px;
+            font-weight: bold;
+        }
+        
+        button {
+            width: 90px;
+            height: 40px;
+            font-size: 25px;
+            border: 1px solid black;
+            cursor: pointer;
+            margin: 5px;
+            outline: none;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        let interval;
+        let timeGap = 0;
+        let clicked = 0;
+        $(document).ready(function() {
+            // addZeroes(5, 3);
+            $("#btnClick").click(function() {
+                if ($(this).html() == "Start") {
+                    $(this).html("Stop");
+                    if (clicked == 0) {
+                        updateTime(0);
+                    } else {
+                        updateTime(timeGap);
+                    }
+                    clicked++;
+
+                } else if ($(this).html() == "Stop") {
+                    clearInterval(interval);
+                    $(this).html("Start");
+                    //stop the timer
+
+                }
+            });
+
+            $("#btnReset").click(function() {
+                clicked = 0;
+                if (interval) {
+                    clearInterval(interval);
+
+                }
+                displayTime(0, 0, 0, 0);
+                $("btnClick").html("Start");
+            });
+
+            function updateTime(elapsedTime) {
+                let startTime = Date.now();
+                interval = setInterval(function() {
+                    timeGap = Date.now() - startTime + elapsedTime;
+
+                    let hours = parseInt(timeGap / 1000 / 60 / 60);
+
+                    let minutes = parseInt(timeGap / 1000 / 60);
+                    if (minutes >= 60) {
+                        minutes %= 60;
+                    }
+                    let seconds = parseInt(timeGap / 1000);
+                    if (seconds >= 60) {
+                        seconds %= 60;
+                    }
+                    let millisecond = timeGap;
+                    if (millisecond >= 1000) {
+                        millisecond %= 1000;
+                    }
+
+                    // console.log(hours + ":" + minutes + ":" + seconds + ":" + millisecond);
+
+                    displayTime(hours, minutes, seconds, millisecond);
+
+                }, 100);
+            }
+
+            function displayTime(h, m, s, ms) {
+                console.log("hello");
+                $("#hour").html(addZeroes(h, 2));
+                $("#minute").html(addZeroes(m, 2));
+                $("#second").html(addZeroes(s, 2));
+                $("#millisecond").html(addZeroes(ms, 3));
+            };
+
+            function addZeroes(number, digits) {
+                let myNum = new String(number);
+                // console.log(myNum);
+                return new Array(digits - myNum.length + 1).join("0") + myNum;
+
+            };
+
+        });
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="timer">
+            <span id="hour">00</span><span><sub>h</sub></span>
+            <span id="minute">00</span><span><sub>m</sub></span>
+            <span id="second">00</span><span><sub>s</sub></span>
+            <span id="millisecond">000</span><span><sub>ms</sub></span>
+        </div>
+        <button id="btnClick">Start</button>
+        <button id="btnReset">Reset</button>
+    </div>
+
+</body>
+
+</html>

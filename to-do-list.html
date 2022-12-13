@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <style>
+        h1 {
+            text-align: center;
+            color: gray;
+            margin: 15px auto;
+        }
+        
+        #list p {
+            width: 500px;
+            margin: 0 auto;
+            font-size: 16px;
+            padding: 20px;
+            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        #list p .close {
+            float: right;
+            cursor: pointer;
+            color: black;
+        }
+        
+        #list p .close:hover {
+            color: red;
+        }
+        
+        #additem {
+            width: 400px;
+            height: 60px;
+            margin: 10px auto;
+        }
+        
+        #item {
+            background: silver;
+            width: 300px;
+            height: 50px;
+            margin: 4px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+        }
+        
+        #item:focus {
+            outline: none;
+            background: ghostwhite;
+        }
+        
+        #btnAdd {
+            width: 50px;
+            height: 50px;
+            color: white;
+            background: cornflowerblue;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        #btnAdd:hover {
+            background: dodgerblue;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#btnAdd").click(function() {
+                let newItem = $("#item").val();
+                if (newItem != "") {
+                    $("#list").append(`<p>
+                                        <input type="checkbox">
+                                        <span>` + newItem + `</span>
+                                        <span class="close">X</span>
+                                    </p>`);
+                    $("#item").val("");
+                }
+            });
+
+            $("body").on("click", ".close", function() {
+                $(this).parent().remove();
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>To-Do List</h1>
+    <div id="list">
+        <p>
+            <input type="checkbox">
+            <span>Pay electricity bill</span>
+            <span class="close">X</span>
+        </p>
+        <p>
+            <input type="checkbox" checked>
+            <span>Wardrobe organizing</span>
+            <span class="close">X</span>
+        </p>
+        <p>
+            <input type="checkbox">
+            <span>Record YT video</span>
+            <span class="close">X</span>
+        </p>
+        <p>
+            <input type="checkbox" checked>
+            <span>Edit jquery video</span>
+            <span class="close">X</span>
+        </p>
+    </div>
+    <div id="additem">
+        <input type="text" id="item" placeholder="Add item">
+        <button id="btnAdd">+</button>
+    </div>
+
+</body>
+
+</html>

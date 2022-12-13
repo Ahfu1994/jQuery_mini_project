@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accordion1</title>
+    <style>
+        .ticker {
+            background-color: #bcfdf0;
+            width: 250px;
+            height: 350px;
+            border: 3px solid #07c9a2;
+            overflow: hidden;
+            border-radius: 15px;
+            margin: 0 auto;
+        }
+        
+        ul {
+            margin: 1px;
+            padding: 1px;
+        }
+        
+        li {
+            text-align: justify;
+            list-style-type: none;
+            padding: 10px;
+            border-bottom: 2px solid #07c9a2;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        let interval;
+
+        function startTicker() {
+            $("#news li:first").slideUp(function() {
+                $(this).appendTo($("#news")).slideDown();
+            });
+
+        }
+
+        function stopTicker() {
+            clearInterval(interval);
+        }
+
+        $(document).ready(function() {
+            interval = setInterval(startTicker, 1000);
+            $("#news").hover(function() {
+                stopTicker();
+            }, function() {
+                interval = setInterval(startTicker, 1000);
+            })
+        });
+    </script>
+</head>
+
+<body>
+    <div class="ticker">
+        <ul id="news">
+            <li>The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news.</li>
+            <li>The <b>second</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news. The <b>first</b> piece of news.</li>
+            <li>The <b>third</b> piece of news. The <b>third</b> piece of news. The <b>third</b> piece of news. The <b>third</b> piece of news.</li>
+            <li>The <b>fourth</b> piece of news. The <b>fourth</b> piece of news. The <b>fourth</b> piece of news. The <b>fourth</b> piece of news.</li>
+            <li>The <b>fifth</b> piece of news. The <b>fifth</b> piece of news. The <b>fifth</b> piece of news. The <b>fifth</b> piece of news.</li>
+
+        </ul>
+    </div>
+
+</body>
+
+</html>

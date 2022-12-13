@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word search game</title>
+    <style>
+        #container {
+            width: 810px;
+            height: 650px;
+            margin: 0px auto;
+        }
+        
+        #hint {
+            width: 200px;
+            height: 580px;
+            float: left;
+            text-align: center;
+            font-size: 30px;
+            border: 1px solid black;
+            display: none;
+        }
+        
+        #letters {
+            width: 580px;
+            height: 580px;
+            float: right;
+        }
+        
+        .individual {
+            width: 40px;
+            height: 40px;
+            float: left;
+            border: 1px solid black;
+            border-radius: 2px;
+            font-size: 25px;
+            text-align: center;
+            margin: 3px;
+        }
+        
+        .done {
+            text-decoration: line-through;
+        }
+        
+        .colorYellow {
+            background: yellowgreen;
+        }
+        
+        .correctlySelected {
+            background: silver;
+        }
+        
+        #message {
+            color: red;
+        }
+    </style>
+    <script src="jquery_3_6_1.js"></script>
+    <script>
+        let myWords = ['EGG', 'MILK', 'BUTTER', 'JAM', 'OATS', 'SUGAR', 'BREAD', 'RUSK']
+        let tempWords = [];
+        let selectedWord = "";
+        $(document).ready(function() {
+            alert("RULES\n1. Words could be displayed horizontally, vertically or diagonally.\n2.To select the letters press Shift or Cmd key and them click the letters in the correct order and then release the shift or Cmt key.")
+            arrangeGame();
+            $(".individual").click(function() {
+                $(this).addClass("colorYellow");
+                selectedWord += $(this).html();
+                // console.log(selectedWord);
+            });
+            $(document).keydown(function() {
+                selectedWord = "";
+                $(".individual").removeClass("colorYellow");
+            }).keyup(function() {
+                if (myWords.indexOf(selectedWord) >= 0) {
+                    $(".colorYellow").addClass("correctlySelected");
+                    $("#hint p").each(function(key, item) {
+                        if (selectedWord == $(item).html()) {
+                            // alert($(this).html());
+                            $(this).addClass("done");
+                        }
+                        if ($(".done").length == myWords.length) {
+                            $("#hint").empty();
+                            $("#hint").append("<p id=message>Wow! you have done it.</p>")
+                        }
+                    });
+                }
+            });
+        });
+
+        function arrangeGame() {
+            $("#hint").show();
+            $.each(myWords, function(key, item) {
+                $("#hint").append("<p>" + item + "</p>");
+            });
+
+            for (let i = 1; i <= 12; i++) {
+                for (let j = 1; j <= 12; j++) {
+                    $("#letters").append("<div class=individual data-row=" + i + " data-column=" + j + "></div>");
+
+                }
+
+            }
+            placeCorrectLetters(myWords);
+            // console.log("end of first array \n");
+            placeCorrectLetters(tempWords);
+
+            $.each($(".individual"), function(key, item) {
+                if ($(item).attr("data-word") == undefined) {
+                    $(this).html(randomLetter());
+                }
+            });
+        }
+
+        function randomLetter() {
+            let alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            return alphabets.charAt(Math.floor(Math.random() * 26));
+        }
+
+        function checkOccupied(word, starting, orientation) {
+            let status = "";
+            let incrementBy = 0;
+            if (orientation == "row") {
+                incrementBy = 1;
+            } else if (orientation == "column") {
+                incrementBy = 12;
+            } else if (orientation == "diagonal") {
+                incrementBy = 13;
+            }
+            for (let p = starting, q = 0; q < word.length; q++) {
+                if ($(".individual:eq(" + p + ")").attr("data-word") == undefined) {
+                    status = "empty";
+                } else {
+                    status = "occupied";
+                    break;
+                }
+                p += incrementBy;
+            }
+            return status;
+        }
+
+        function placeCorrectLetters(myArr) {
+            let positions = ["row", "column", "diagonal"];
+            let nextLetter = 0;
+            let newStart = 0;
+            for (let i = 0; i < myArr.length; i++) {
+                let orientation = positions[Math.floor(Math.random() * positions.length)];
+                // alert(orientation);
+                let start = Math.floor(Math.random() * $(".individual").length);
+                let myRow = $(".individual:eq(" + start + ")").data("row");
+                let myColumn = $(".individual:eq(" + start + ")").data("column");
+
+
+                // $(".individual:eq(" + start + ")").html("A");
+                // console.log(myArr[i] + " : " + start + " : " + orientation + " : " + myRow + " : " + myColumn);
+
+                if (orientation == "row") {
+                    nextLetter = 1;
+                    if (myColumn * 1 + myArr[i].length <= 12) {
+                        newStart = start;
+                        // console.log("space in row : " + myArr[i] + " : " + start + " : " + myColumn);
+
+                    } else {
+                        let newColumn = 12 - myArr[i].length;
+                        newStart = $(".individual[data-row=" + myRow + "][data-column=" + newColumn + "]").index();
+                        // console.log("no space in row : " + myArr[i] + " : " + start + " : " + myColumn + " : " + newStart);
+                    }
+
+                } else if (orientation == "column") {
+                    nextLetter = 12;
+                    if (myColumn * 1 + myArr[i].length <= 12) {
+                        newStart = start;
+                        // console.log("space in column : " + myArr[i] + " : " + start + " : " + myRow);
+
+                    } else {
+                        let newRow = 12 - myArr[i].length;
+                        newStart = $(".individual[data-row=" + newRow + "][data-column=" + myColumn + "]").index();
+                        // console.log("no space in column : " + myArr[i] + " : " + start + " : " + myRow + " : " + newStart);
+                    }
+                } else if (orientation == "diagonal") {
+                    nextLetter = 13;
+                    if (((myColumn * 1) + myArr[i].length <= 12) && ((myRow * 1) + myArr[i].length <= 12)) {
+                        newStart = start;
+                    }
+                    if (((myColumn * 1) + myArr[i].length > 12)) {
+                        let newColumn = 12 - myArr[i].length;
+                        newStart = $(".individual[data-row=" + myRow + "][data-column=" + newColumn + "]").index();
+                    }
+                    if ((myRow * 1) + myArr[i].length > 12) {
+                        let newRow = 12 - myArr[i].length;
+                        newStart = $(".individual[data-row=" + newRow + "][data-column=" + myColumn + "]").index();
+                    }
+                    if (((myColumn * 1) + myArr[i].length > 12) && ((myRow * 1) + myArr[i].length > 12)) {
+                        let newColumn = 12 - myArr[i].length;
+                        let newRow = 12 - myArr[i].length;
+                        newStart = $(".individual[data-row=" + newRow + "][data-column=" + newColumn + "]").index();
+
+                    }
+                }
+
+                let characters = myArr[i].split("");
+                let nextPosition = 0;
+                let occupied = checkOccupied(myArr[i], newStart, orientation);
+                if (occupied == "empty") {
+                    $.each(characters, function(key, item) {
+                        // console.log(item);
+                        $(".individual:eq(" + (newStart + nextPosition) + ")").html(item);
+                        $(".individual:eq(" + (newStart + nextPosition) + ")").css("background", "gray");
+                        $(".individual:eq(" + (newStart + nextPosition) + ")").attr("data-word", myArr[i]);
+
+                        nextPosition += nextLetter;
+                    });
+                } else {
+                    tempWords.push(myArr[i]);
+                }
+
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div id="container">
+        <div id="hint">
+
+        </div>
+        <div id="letters">
+
+        </div>
+    </div>
+
+</body>
+
+</html>
